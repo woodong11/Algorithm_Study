@@ -1,0 +1,87 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include<cstring>
+#include<vector>
+
+using namespace std;
+
+
+
+vector<int> v[101];
+int DAT[101];
+int N, from, to, m, Fcnt, Tcnt;
+bool fp, fc;
+
+
+
+void findP(int parent) {
+	for (int i = 0; i < v[parent].size(); i++) {
+		if (v[parent][i] == from) {
+			fp = true;
+		}
+		if (v[parent][i] == to) {
+			fc = true;
+		}
+
+		findP(v[parent][i]);
+		
+		if (fp && fc) {
+			// 공통되는 최상위 부모 찾기
+			m = parent;
+		}
+	}
+
+	return;
+}
+
+void solution(int parent, int level) {
+	for (int i = 0; i < v[parent].size(); i++) {
+
+	}
+}
+
+
+int main() {
+
+	cin >> N >> from >> to >> m;
+
+	for (int i = 0; i < m; i++) {
+		int x, y;
+		cin >> x >> y;
+		v[x].push_back(y);
+	}
+
+
+	for (int i = 0; i < N; i++) {
+		cout << i << " ";
+		for (int j = 0; j < v[i].size(); j++) {
+			cout << v[i][j] << " ";
+		}
+		cout << "\n";
+	}
+
+	// 최상위 부모 구하기
+	for (int i = 0; i < N; i++) {
+		for (int k = 0; k < v[i].size(); k++) {
+			DAT[k] = 1;
+			if (DAT[i] != 1) {
+				v[0].push_back(i);
+			}
+		}
+	}
+
+	for (int i = 0; i < N; i++) {
+		if (DAT[i] == 1) continue;
+		fp = false;
+		fc = false;
+		findP(i);
+	}
+	if (m == 0) {
+		cout << "-1";
+	}
+	else {
+
+	}
+
+	return 0;
+}
