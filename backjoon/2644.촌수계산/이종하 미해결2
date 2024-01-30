@@ -1,0 +1,62 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include<cstring>
+#include<vector>
+
+using namespace std;
+
+
+
+vector<int> v[101];
+int N, from, to, m, cnt, temp;
+bool fp, fc, cut;
+
+
+
+void solve(int parent, int level) {
+
+	for (int i = 0; i < v[parent].size(); i++) {
+		if ((v[parent][i] == from || v[parent][i] == to) && cut) {
+			fp = true;
+			cnt = level + temp;
+		}
+		if ((v[parent][i] == from || v[parent][i] == to) && !cut) {
+			cut = true;
+			temp = level;
+			if (1 == from) {
+				fp = true;
+				cut = true;
+				cnt = level;
+			}
+		}
+
+		solve(v[parent][i], level + 1);
+	}
+
+	return;
+}
+
+
+
+int main() {
+
+	cin >> N >> from >> to >> m;
+
+	for (int i = 0; i < m; i++) {
+		int x, y;
+		cin >> x >> y;
+		v[x].push_back(y);
+	}
+
+	solve(1, 1);
+
+	if (cut && fp) {
+		cout << cnt;
+	}
+	else {
+		cout << "-1";
+	}
+
+
+	return 0;
+}
