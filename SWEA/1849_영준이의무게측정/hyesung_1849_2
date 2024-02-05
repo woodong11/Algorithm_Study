@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+typedef struct {
+	int cmp_sample;
+	int weight_diff;
+}record;
+
+bool dfs(vector<vector<record>> &records, vector<bool>& used, int crt_sample, int target, int &diff) {
+	
+	if (crt_sample == target) {
+		return true;
+	}
+	vector<record> cmp_records = records[crt_sample];
+	
+	for (record cmp_record : cmp_records) {
+		if (used[cmp_record.cmp_sample] == false) {
+			used[cmp_record.cmp_sample] = true;
+			diff += cmp_record.weight_diff;
+			if (dfs(records, used, cmp_record.cmp_sample, target, diff) ) {
+				return true;
+			}
+			diff -= cmp_record.weight_diff;
+			used[cmp_record.cmp_sample] = false;
+		}
+		
+	}
+	return false;
+}
+
+void solve(int test_case) {
+	int sample_num, task_num;
+
+	scanf("%d %d", &sample_num, &task_num);
+	vector<vector<record>> records(sample_num + 1);
+
+	cout << "#" << test_case << " ";
+	for (int i = 0; i < task_num; i++) {
+		char c;
+		scanf(" %c", &c);
+		if (c == '!') {
+			int light, heavy, diff;
+			scanf("%d %d %d", &light, &heavy, &diff);
+			records[light].push_back({ heavy, diff });
+			records[heavy].push_back({ light, -diff });
+		}
+		else if (c == '?') {
+			int start_sample, target_sample;
+			scanf("%d %d", &start_sample, &target_sample);
+
+			int diff = 0;
+			vector<bool> used(sample_num + 1, false);
+			if (dfs(records, used, start_sample, target_sample, diff)) {
+				printf("%d ", diff);
+			} else {
+				printf("UNKNOWN ");
+			}
+		}
+	}
+	printf("\n");
+}
+
+int main() {
+	int test_num;
+	cin >> test_num;
+
+	for (int test_case = 1; test_case <= test_num; test_case++) {
+		solve(test_case);
+	}
+
+	return 0;
+}
