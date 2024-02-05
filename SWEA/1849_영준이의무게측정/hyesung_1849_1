@@ -1,0 +1,118 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+typedef struct {
+	int origin_group;
+	int weight;
+}sample;
+
+struct pair_hash {
+	template <class T1, class T2>
+	std::size_t operator () (const std::pair<T1, T2>& p) const {
+		auto h1 = std::hash<T1>{}(p.first);
+		auto h2 = std::hash<T2>{}(p.second);
+
+		return h1 ^ h2;
+	}
+};
+
+void solve(int test_case) {
+	int sample_num, task_num;
+
+	cin >> sample_num >> task_num;
+
+	vector<sample> samples(sample_num + 1, { 0, 0 });
+	vector<vector<int>> belong_groups(1);
+
+	unordered_map<pair<int, int>, int, pair_hash> relative_weight;
+
+	int group_count = 0;
+	cout << "#" << test_case << " ";
+	for (int i = 0; i < task_num; i++) {
+		char c;
+		scanf(" %c", &c);
+		if (c == '!') {
+			int light, heavy, diff;
+			scanf("%d %d %d", &light, &heavy, &diff);
+
+			int light_origin_group = samples[light].origin_group;
+			int heavy_origin_group = samples[heavy].origin_group;
+
+			if (light_origin_group == 0 && heavy_origin_group == 0) {
+				group_count++;
+
+				belong_groups.push_back(vector<int>());
+
+				samples[light].origin_group = samples[heavy].origin_group = group_count;
+				belong_groups[group_count].push_back(group_count);
+
+				samples[light].weight = 0;
+				samples[heavy].weight = diff;
+				relative_weight[{ group_count, group_count }] = 0;
+			}
+			else if (light_origin_group != 0 && heavy_origin_group != 0) {
+				int light_now_group = belong_groups[light_origin_group].back();
+				int heavy_now_group = belong_groups[heavy_origin_group].back();
+
+				if (light_now_group == heavy_now_group) continue;
+				if (light_now_group < heavy_now_group) {
+					belong_groups[heavy_origin_group].push_back(light_now_group);
+				}
+				else {
+					belong_groups[light_origin_group].push_back(heavy_now_group);
+				}
+				int small_group_num = min(light_now_group, heavy_now_group);
+
+				if (relative_weight.find({ small_group_num, light_now_group }) == relative_weight.end()) {
+					int relative_diff = relative_weight[{small_group_num, heavy_origin_group}] - diff + samples[heavy].weight + samples[light].weight;
+					relative_weight[{small_group_num, light_origin_group}] = relative_diff;
+				}
+				else {
+					int relative_diff = relative_weight[{small_group_num, light_origin_group}] + diff + samples[heavy].weight + samples[light].weight;
+					relative_weight[{small_group_num, heavy_origin_group}] = relative_diff;
+				}
+			}
+			else {
+				if (light_origin_group == 0) {
+					samples[light].origin_group = samples[heavy].origin_group;
+					samples[light].weight = samples[heavy].weight - diff;
+				}
+				else {
+					samples[heavy].origin_group = samples[light].origin_group;
+					samples[heavy].weight = samples[light].weight + diff;
+				}
+			}
+		}
+		else if (c == '?') {
+			int first, second;
+			scanf("%d %d", &first, &second);
+			int origin1 = samples[first].origin_group;
+			int origin2 = samples[second].origin_group;
+			if (origin1 != 0 && origin2 != 0 && belong_groups[origin1].back() == belong_groups[origin2].back()) {
+				int diff1 = relative_weight[{belong_groups[origin1].back(), origin1}];
+				int diff2 = relative_weight[{belong_groups[origin2].back(), origin2}];
+
+				printf("%d ", samples[second].weight - samples[first].weight + diff2 - diff1);
+				//cout << samples[second].weight - samples[first].weight + diff2 - diff1 << " ";
+			}
+			else {
+				printf("UNKNOWN ");
+			}
+		}
+	}
+	printf("\n");
+}
+
+int main() {
+	int test_num;
+	cin >> test_num;
+
+	for (int test_case = 1; test_case <= test_num; test_case++) {
+		solve(test_case);
+	}
+
+	return 0;
+}
