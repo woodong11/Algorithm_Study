@@ -8,14 +8,14 @@ int MAP[50][50];
 int cnt;
 int curR, curC, direction;
 
-// ¹İ½Ã°è ¹æÇâÀ¸·Î value¸¸Å­ ¹æÇâ º¯È¯ - ¸¸¾à ½Ã°è¹æÇâÀÌ¾ú´Ù¸é °£´ÜÇÏ°Ô direction = (direction + value) % 4 ÇØµµ µÈ´Ù.
+// ë°˜ì‹œê³„ ë°©í–¥ìœ¼ë¡œ valueë§Œí¼ ë°©í–¥ ë³€í™˜ - ë§Œì•½ ì‹œê³„ë°©í–¥ì´ì—ˆë‹¤ë©´ ê°„ë‹¨í•˜ê²Œ direction = (direction + value) % 4 í•´ë„ ëœë‹¤.
 int directionChange(int direction, int value) {
 	int temp = direction - value;
 	if (temp < 0) temp += 4;
 	return temp;
 }
 
-// ÁÖº¯ 4Ä­ Áß ¸ÕÁö Ã£±â ÇÔ¼ö
+// ì£¼ë³€ 4ì¹¸ ì¤‘ ë¨¼ì§€ ì°¾ê¸° í•¨ìˆ˜
 bool dustFind(int row, int col) {
 	for (int k = 0; k < 4; k++)
 	{
@@ -42,16 +42,16 @@ int main() {
 		}
 	}
 
-	// Ã»¼Ò ¾È µÈ Ä­: 0, º®: 1 Ã»¼ÒµÈ Ä­: 2
+	// ì²­ì†Œ ì•ˆ ëœ ì¹¸: 0, ë²½: 1 ì²­ì†Œëœ ì¹¸: 2
 	while (1){
 
-		// 1¹ø: ÇöÀçÄ­ Ã»¼Ò
+		// 1ë²ˆ: í˜„ì¬ì¹¸ ì²­ì†Œ
 		if (MAP[curR][curC] == 0) {
 			MAP[curR][curC] = 2;
 			cnt++;
 		}
 
-		// 3¹ø
+		// 3ë²ˆ
 		if (dustFind(curR, curC)) {
 			direction = directionChange(direction, 1);
 			int tempRow = curR + dx[direction];
@@ -64,7 +64,7 @@ int main() {
 		
 		}
 
-		// 2¹ø
+		// 2ë²ˆ
 		else {
 			int tempDirection = directionChange(direction, 2);
 			int tempRow = curR + dx[tempDirection];
@@ -75,7 +75,7 @@ int main() {
 			}
 
 			else {
-				break;		// ÀÛµ¿ Á¾·á
+				break;		// ì‘ë™ ì¢…ë£Œ
 			}
 		
 		}
