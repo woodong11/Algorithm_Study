@@ -1,0 +1,38 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int dfs(string target, int transCount, vector<string> transWords, vector<string> words) {
+    vector<string> nextTransWords;
+    
+    if(words.size() == 0 || transWords.size() == 0) return 0;
+    
+    for(int i = 0; i < words.size();){
+        for(int j = 0; j < transWords.size(); j++){
+            int diffCount = 0;
+            for(int k = 0; k < transWords[j].size(); k++) {
+                if(transWords[j][k] != words[i][k]) diffCount++;
+            }
+            if(diffCount == 1) {
+                if(words[i].compare(target) == 0) return transCount + 1;
+                nextTransWords.push_back(words[i]);
+                words.erase(words.begin() + i);
+                break;
+            } else {
+                i++;
+            }
+        }
+    }
+    
+    return dfs(target, transCount + 1, nextTransWords, words);
+}
+
+int solution(string begin, string target, vector<string> words) {
+    int answer = 0;
+    vector<string> transWords;
+    transWords.push_back(begin);
+    
+    return dfs(target, 0, transWords, words);
+}
