@@ -36,6 +36,7 @@ int minValue() {
 	return minVal;
 }
 
+
 // rotateInfo 배열 중 해당 번호번 실행하는 함수
 void rotate(int num) {
 	rotateInfo now = rotateInfos[num];
@@ -93,14 +94,16 @@ void func(int level) {
 
 		visited[i] = 1;
 		path[level] = i;
-		rotate(i);
 		func(level + 1);
 		visited[i] = 0;
 	}
 }
 
+
+
+
 int main() {
-  
+
 	// 입력부
 	cin >> N >> M >> K;
 	for (int i = 0; i < N; i++)
@@ -117,6 +120,7 @@ int main() {
 		cin >> r >> c >> s;
 		rotateInfos[i] = { r-1, c-1, s };
 	}
+
 
 	// 수행부
 	func(0);
