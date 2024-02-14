@@ -74,7 +74,6 @@ void rotate(int num) {
 }
 
 // 왜 순열로 할때만 풀리는지?
-// 왜 memcpy를 먼저 해야 답이 맞는걸까? 
 void func(int level) {
 	
 	if (level == K) {
