@@ -5,8 +5,8 @@ using namespace std;
 
 int N, answer;
 int MAP[101][101];
-int dx[4] = {1, 0, -1, 0};
-int dy[4] = {0, -1, 0, 1};
+int dx[4] = { 1, 0, -1, 0 };
+int dy[4] = { 0, -1, 0, 1 };
 
 struct coordinate {
 	int x;
@@ -17,20 +17,13 @@ coordinate rotate(int baseX, int baseY, int x, int y) {
 	coordinate newCool;
 	int gapX = x - baseX;
 	int gapY = y - baseY;
+	newCool.y = baseY + gapX;
+	newCool.x = baseX - gapY;	
 
-	if (gapX >= 0)						// 기준좌표대비 비교좌표가 오른쪽에 있었을때
-		newCool.y = baseY + gapX;		// baseY보다 더 +가 됨
-	else
-		newCool.y = baseY + gapX;		// baseY보다 더 -가 됨
-
-	if (gapY < 0)						// 기준좌표대비 비교좌표가 위쪽에 있었을때
-		newCool.x = baseX - gapY;		// baseX보다 더 +가 됨
-	else
-		newCool.x = baseX - gapY;		// baseX보다 더 +가 됨
 	return newCool;
 }
 
-void makeCurve(int startX, int startY, int d, int g){
+void makeCurve(int startX, int startY, int d, int g) {
 	vector <coordinate> curves;
 	curves.push_back({ startX, startY });
 
@@ -46,7 +39,7 @@ void makeCurve(int startX, int startY, int d, int g){
 			coordinate newCoor;
 			// 돌려야 할 좌표 개수: 0->1세대는 1개, 1->2세대는 2개, 2->3세대는 4개, ...
 			// 맨 마지막에 끝좌표 업데이트를 위해 일부러 거꾸로 인덱스
-			for (int i = pow(2, gen)-1; i >= 0; i--)	 
+			for (int i = pow(2, gen) - 1; i >= 0; i--)
 			{
 				int nowX = curves[i].x;
 				int nowY = curves[i].y;
@@ -64,7 +57,7 @@ void makeCurve(int startX, int startY, int d, int g){
 		if (temp.x >= 0 && temp.y >= 0 && temp.x <= 100 && temp.y <= 100)	// 커브 점 MAP에 찍기
 			MAP[temp.y][temp.x] = 1;
 	}
-	
+
 }
 
 int main() {
