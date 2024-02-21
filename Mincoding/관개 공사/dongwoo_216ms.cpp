@@ -1,3 +1,6 @@
+// line벡터에 위치들 저장해놨다가
+// costLine벡터에 두 위치, 거리 저장
+
 #include <iostream>
 #include <vector>
 #include <cmath>
