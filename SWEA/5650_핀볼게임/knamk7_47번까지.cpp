@@ -23,10 +23,10 @@ void init()
 {
     memset(map, 11, sizeof(map));
     result = 0;
-    //for (int i = 6; i <= 10; i++)
-    //{
-    //    wormholes[i].clear();
-    //}
+    for (int i = 6; i <= 10; i++)
+    {
+        wormholes[i].clear();
+    }
 }
 
 void input()
@@ -72,8 +72,6 @@ void move(int y, int x, int direction)
         else
         {
             direction = (direction + 2) % 4;
-            /*ny += dy[direction];
-            nx += dx[direction];*/
         }
         move(ny, nx, direction);
     }
@@ -81,8 +79,6 @@ void move(int y, int x, int direction)
     {
         score++;
         direction = (direction + 2) % 4;
-        /*ny += dy[direction];
-        nx += dx[direction];*/
         move(ny, nx, direction); // 이게 괜찮을까? 영역 밖일 수도 있는데 일단 괜찮을 듯?
     }
     else
