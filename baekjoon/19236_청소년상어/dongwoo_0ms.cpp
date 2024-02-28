@@ -50,8 +50,6 @@ fishInfo fishList[17];
 void move(int sharkY, int sharkX, int fishSum) {
 
     // 맵 변경하기 전에 상어 이동여부부터 먼저 체크
-    int sharkDirection = MAP[sharkY][sharkX].direction;
-    answer = max(answer, fishSum);
     //int newY = sharkY + dy[sharkDirection];
     //int newX = sharkX + dx[sharkDirection];
     //if (newY < 0 || newX < 0 || newY >= 4 || newX >= 4) {     // 범위 벗어날때 상어 집 돌아가고 재귀 종료
@@ -59,6 +57,9 @@ void move(int sharkY, int sharkX, int fishSum) {
     //    return;
     //}
 
+    int sharkDirection = MAP[sharkY][sharkX].direction;
+    answer = max(answer, fishSum);
+    
     // 미리 저장하기
     fish tempMap[4][4];
     fishInfo tempList[17];
