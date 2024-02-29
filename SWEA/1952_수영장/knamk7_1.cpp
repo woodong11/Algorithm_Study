@@ -22,7 +22,7 @@ void run(int level, int expense)
 		run(level + 1, expense + price[1]);			// 1달
 		run(level + 3, expense + price[2]);			// 3달
 	}
-	else								// 이번 달 0회일 때 스킵 (필수 아님)
+	else								// 이번 달 0회일 때 스킵 (필수 아님, 추가하면 17ms에서 14ms로 시간 단축)
 	{
 		run(level + 1, expense);
 	}
