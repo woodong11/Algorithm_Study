@@ -105,7 +105,7 @@ void dewire(Point processor, int direction)
 
 void dfs(int level)
 {
-	if (level == number_of_processors) // 가지치기로 시간 절약 가능할 듯
+	if (level == number_of_processors || connected + number_of_processors - level < max_connected) // 가지치기로 시간 절약
 	{
 		if (max_connected == connected)
 		{
