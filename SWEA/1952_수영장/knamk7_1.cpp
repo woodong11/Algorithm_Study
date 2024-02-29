@@ -5,7 +5,7 @@
 using namespace std;
 
 int minVal;
-int price[4];
+int price[4]; // { 1일, 1달, 3달, 1년 }
 int schedule[12];
 
 void run(int level, int expense)
@@ -18,11 +18,11 @@ void run(int level, int expense)
 
 	if (schedule[level])
 	{
-		run(level + 1, expense + price[0] * schedule[level]);
-		run(level + 1, expense + price[1]);
-		run(level + 3, expense + price[2]);
+		run(level + 1, expense + price[0] * schedule[level]);	// 1일
+		run(level + 1, expense + price[1]);			// 1달
+		run(level + 3, expense + price[2]);			// 3달
 	}
-	else
+	else								// 이번 달 0회일 때 스킵 (필수 아님)
 	{
 		run(level + 1, expense);
 	}
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 		{
 			cin >> schedule[i];
 		}
-		minVal = price[3];
+		minVal = price[3]; // 1년
 		run(0, 0);
 		printf("#%d %d\n", test_case, minVal);
 	}
