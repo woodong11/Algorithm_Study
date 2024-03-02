@@ -2,6 +2,7 @@
 // 처음엔 순열 다 만들고 각 경우마다 테스트할랬는데 20에서 시간초과
 // -> 순열 만들면서 동시에 판단하기
 // 가지치기 2개
+// 가지치기 1번 for문 밖으로 빼니깐 시간초과 해결
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
