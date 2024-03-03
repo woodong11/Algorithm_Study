@@ -82,7 +82,7 @@ int main() {
                 }
                 Cell cell = dq[0];
                 dq.pop_front();
-
+                // 여기서 번식 조건을 안 넣고 for문 돌려서 틀린 건가?
                 for (int i = 0; i < 4; i++) {
                     nx = cell.x + dx[i];
                     ny = cell.y + dy[i];
