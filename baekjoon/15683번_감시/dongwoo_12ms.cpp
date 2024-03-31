@@ -96,7 +96,7 @@ void func(int level, int unVisibleCnt) {
 		// 재귀 타기
 		func(level + 1, unVisibleCnt - visibleCnt);
 
-		// 복귀
+		// 복구
 		for (auto curCctv : visibleList) {
 			MAP[curCctv.y][curCctv.x] = 0;
 		}
