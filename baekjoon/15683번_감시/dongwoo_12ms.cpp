@@ -58,7 +58,45 @@ void func(int level, int unVisibleCnt) {
 	cctv curCctv = cctvList[level];
 	vector<vector <int>> curDirList = directionList[curCctv.num];
 
-	for (int i = 0; i < curDirList.size(); i구
+	for (int i = 0; i < curDirList.size(); i++)
+	{
+		int visibleCnt = 0;
+		vector <Node> visibleList;
+		int baseY = curCctv.y;
+		int baseX = curCctv.x;
+
+		// 해당 방향 목록의 각 방향마다 
+		for (int j = 0; j < curDirList[i].size(); j++) {
+			int curDir = curDirList[i][j];
+		
+			int curY = baseY;
+			int curX = baseX;
+			while (1)
+			{
+				int ny = curY + dy[curDir];
+				int nx = curX + dx[curDir];
+
+				if (ny < 0 || nx < 0 || ny >= N || nx >= M)		// 범위 밖
+					break;
+				if (MAP[ny][nx] == 6)					// 벽 만날때
+					break;
+				if (MAP[ny][nx] != 0) {					// 다른 cctv나 이미 본 곳일때
+					curY = ny; 
+					curX = nx;
+					continue;
+				}
+				
+				MAP[ny][nx] = -1;
+				visibleList.push_back({ ny, nx });
+				visibleCnt ++;
+				curY = ny;
+				curX = nx;
+			}	
+		}
+		// 재귀 타기
+		func(level + 1, unVisibleCnt - visibleCnt);
+
+		// 복귀
 		for (auto curCctv : visibleList) {
 			MAP[curCctv.y][curCctv.x] = 0;
 		}
