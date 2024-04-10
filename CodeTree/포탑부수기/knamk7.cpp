@@ -1,7 +1,6 @@
 #include<iostream>
 #include<algorithm>
 #include<climits>
-#include<cstdint>
 #include<queue>
 #include<vector>
 using namespace std;
@@ -16,7 +15,7 @@ int N, M, K;
 bool flag = 0;
 vector<vector<int>> map;
 vector<vector<int>> latest_attack;
-vector<vector<int>> visited;
+vector<vector<Node>> visited;
 vector<vector<bool>> related;
 Node attacker;
 Node target;
@@ -33,32 +32,24 @@ void init();
 
 void dfs(Node now)
 {
+    if (visited[now.y][now.x].y == 0)
+    {
+        return;
+    }
     if (now.y == attacker.y && now.x == attacker.x)
     {
         return;
     }
-    for (int i = 3; i >= 0; i--)
-    {
-        int ny = now.y - dy[i];
-        int nx = now.x - dx[i];
-        if (ny < 1) ny = N;
-        else if (ny > N) ny = 1;
-        if (nx < 1) nx = M;
-        else if (nx > M) nx = 1;
-        if (visited[now.y][now.x] - visited[ny][nx] == 1)
-        {
-            lasertrace.push_back({ ny,nx });
-            dfs({ ny, nx });
-            break;
-        }
-    }
+    lasertrace.push_back(visited[now.y][now.x]);
+    dfs(visited[now.y][now.x]);
 }
 
 void bfs()
 {
+    bool breakflag = 0;
     queue<Node> q;
     q.push(attacker);
-    visited[attacker.y][attacker.x] = 1;
+    visited[attacker.y][attacker.x] = attacker;
     while (!q.empty())
     {
         Node now = q.front();
@@ -73,9 +64,18 @@ void bfs()
             if (nx < 1) nx = M;
             else if (nx > M) nx = 1;
             if (map[ny][nx] <= 0) continue;
-            if (visited[ny][nx]) continue;
-            visited[ny][nx] = visited[now.y][now.x] + 1;
+            if (visited[ny][nx].y != 0) continue;
+            visited[ny][nx] = now;
+            if (ny == target.y && nx == target.x)
+            {
+                breakflag = 1;
+                break;
+            }
             q.push({ ny, nx });
+        }
+        if (breakflag)
+        {
+            break;
         }
     }
     dfs(target);
@@ -99,7 +99,7 @@ void init()
     map = vector<vector<int>>(N + 2, vector<int>(M + 2));
     latest_attack = vector<vector<int>>(N + 2, vector<int>(M + 2));
     related = vector<vector<bool>>(N + 2, vector<bool>(M + 2));
-    visited = vector<vector<int>>(N + 2, vector<int>(M + 2));
+    visited = vector<vector<Node>>(N + 2, vector<Node>(M + 2));
 }
 
 void start_turn()
@@ -109,7 +109,7 @@ void start_turn()
         for (int j = 1; j <= M; j++)
         {
             related[i][j] = 0;
-            visited[i][j] = 0;
+            visited[i][j] = { 0,0 };
         }
     }
     lasertrace.clear();
@@ -130,33 +130,29 @@ void select()
             else if (map[i][j] < minVal)
             {
                 minVal = map[i][j];
-                a.y = i;
-                a.x = j;
+                a = { i,j };
                 latest = latest_attack[i][j];
             }
             else if (map[i][j] == minVal)
             {
                 if (latest_attack[i][j] > latest)
                 {
-                    a.y = i;
-                    a.x = j;
+                    a = { i,j };
                     latest = latest_attack[i][j];
                 }
                 else if (latest_attack[i][j] < latest)
                 {
                     continue;
                 }
-                else if ((i + j) < (a.y + a.x))
+                else if ((i + j) > (a.y + a.x))
                 {
-                    a.y = i;
-                    a.x = j;
+                    a = { i,j };
                 }
                 else if ((i + j) == (a.y + a.x))
                 {
-                    if (j < a.x)
+                    if (j > a.x)
                     {
-                        a.y = i;
-                        a.x = j;
+                        a = { i,j };
                     }
                 }
             }
@@ -175,16 +171,14 @@ void select()
             else if (map[i][j] > maxVal)
             {
                 maxVal = map[i][j];
-                t.y = i;
-                t.x = j;
+                t = { i,j };
                 latest = latest_attack[i][j];
             }
             else if (map[i][j] == maxVal)
             {
                 if (latest_attack[i][j] < latest)
                 {
-                    t.y = i;
-                    t.x = j;
+                    t = { i,j };
                     latest = latest_attack[i][j];
                 }
                 else if (latest_attack[i][j] > latest)
@@ -193,15 +187,13 @@ void select()
                 }
                 else if ((i + j) < (t.y + t.x))
                 {
-                    t.y = i;
-                    t.x = j;
+                    t = { i,j };
                 }
                 else if ((i + j) == (t.y + t.x))
                 {
                     if (j < t.x)
                     {
-                        t.y = i;
-                        t.x = j;
+                        t = { i,j };
                     }
                 }
             }
@@ -290,19 +282,6 @@ void result()
         }
     }
     cout << maxVal;
-}
-
-void print()
-{
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= M; j++)
-        {
-            printf("%5d ", map[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n\n");
 }
 
 int main()
