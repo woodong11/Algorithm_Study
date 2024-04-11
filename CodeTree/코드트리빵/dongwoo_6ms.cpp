@@ -1,3 +1,10 @@
+/*
+ny nx 쓸때 자나깨나 범위 초과 주의!!!!!!!!!!!!!!!!!!!! 이거때매 6시간 날림
+최단경로로 -1 이동하는거에서 4방향 탐색으로 짰었는데 이때도 범위 벗어났을때 continue 조건을 해야 하는데 빠뜨렸다
+-> visual studio에선 자동으로 continue하는 것 같은데, gcc에선 어림도 없음 
+-> visual studio에선 정답이 제대로 나오는데 서버에선 런타임 에러 뜬다
+*/
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
