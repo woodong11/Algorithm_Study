@@ -29,23 +29,29 @@ void get_gun(int num) {
 	}
 }
 void lose_per(int num) {
+	if (peo[num].gun != 0) {
+		int tmp_gun = map[peo[num].y][peo[num].x];
+		gun[tmp_gun].push_back(peo[num].gun);
+		peo[num].gun = 0;
+	}
 	point now = { peo[num].y,peo[num].x };
+	point next = now;
 	int dir = peo[num].dir;
 	while (1) {
-		now.y = now.y + dy[dir];
-		now.x = now.x + dx[dir];
-		if (now.y < 0 || now.x < 0 || now.y >= n || now.x >= n) {
-			dir = (dir + 2) % 4;
+		next.y = now.y + dy[dir];
+		next.x = now.x + dx[dir];
+		if (next.y <= 0 || next.x <= 0 || next.y > n || next.x > n) {
+			dir = (dir + 1) % 4;
 			continue;
 		}
 		for (int i = 0; i < peo.size(); i++) {
-			if (peo[i].y == now.y && peo[i].x == now.x) {
-				dir = (dir + 2) % 4;
+			if (peo[i].y == next.y && peo[i].x == next.x) {
+				dir = (dir + 1) % 4;
 				continue;
 			}
 		}
-		peo[num].y = now.y, peo[num].x = now.x;
-		int tmp_gun_loc = map[now.y][now.x];
+		peo[num].y = next.y, peo[num].x = next.x;
+		int tmp_gun_loc = map[next.y][next.x];
 		if (gun[tmp_gun_loc].size() != 0) {
 			get_gun(num);
 		}
@@ -73,14 +79,14 @@ void move() {
 			if (peo[j].y == peo[i].y && peo[j].x == peo[i].x) {//이동한 방향에 플레이어가 있어서 싸워야 하는 경우
 				int tmp1 = peo[i].gun + peo[i].s;
 				int tmp2 = peo[j].gun + peo[j].s;
-				if (tmp1 > tmp2) {
+				if ((tmp1 > tmp2) || (peo[i].s > peo[j].s && tmp1 == tmp2)) {
 					int tmp_score = tmp1 - tmp2;
 					peo[i].score += tmp_score;
 					lose_per(j);
 					get_gun(i);
 					flag = 1;
 				}
-				else if (tmp2 > tmp1) {
+				else if (tmp2 > tmp1 || (peo[i].s < peo[j].s && tmp1 == tmp2)) {
 					int tmp_score = tmp2 - tmp1;
 					peo[j].score += tmp_score;
 					lose_per(i);
