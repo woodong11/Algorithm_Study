@@ -23,8 +23,10 @@ void get_gun(int num) {
 	int tmp_pow = gun[tmp_gun_loc].back();
 	if (peo[num].gun < tmp_pow) {
 		gun[tmp_gun_loc].pop_back();
-		if (peo[num].gun != 0)
+		if (peo[num].gun != 0){
 			gun[tmp_gun_loc].push_back(peo[num].gun);
+			peo[num].gun = 0;
+		}
 		peo[num].gun = tmp_pow;
 	}
 }
@@ -38,6 +40,7 @@ void lose_per(int num) {
 	point next = now;
 	int dir = peo[num].dir;
 	while (1) {
+		int flag = 0;
 		next.y = now.y + dy[dir];
 		next.x = now.x + dx[dir];
 		if (next.y <= 0 || next.x <= 0 || next.y > n || next.x > n) {
@@ -45,12 +48,17 @@ void lose_per(int num) {
 			continue;
 		}
 		for (int i = 0; i < peo.size(); i++) {
+			if (i == num)
+				continue;
 			if (peo[i].y == next.y && peo[i].x == next.x) {
 				dir = (dir + 1) % 4;
-				continue;
+				flag = 1;
+				break;
 			}
 		}
-		peo[num].y = next.y, peo[num].x = next.x;
+		if (flag == 1)
+			continue;
+		peo[num].y = next.y, peo[num].x = next.x, peo[num].dir = dir;
 		int tmp_gun_loc = map[next.y][next.x];
 		if (gun[tmp_gun_loc].size() != 0) {
 			get_gun(num);
