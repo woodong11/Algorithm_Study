@@ -1,3 +1,25 @@
+// 시간 단축을 위해서 한 일.
+// 1. string 을 Key값으로 하는 um 을 3개 만듦
+// 1-1. priority_queue<Test> 를 value로 갖는 unable_url 은 grader_waiting에서 우선순위로 꺼냈을 때, 해당 url 이 작업 중일 경우 저장
+// 1-2. Url_check 를 value로 갖는 url_time 은 해당 url 이 t(현재시간) - grid[idx](시간시간) + gap * 2 또는 채점 중인지를 저장
+// 1-3. waiting_url 은 해당 url(url_id까지 있는) 이 중복돼서 들어왔는지 확인해주기 위한 bool 저장
+
+// 2. grader_waiting 에서 우선순위로 나왔으나 해당 url 이 채점 중일 경우를 처리해주는 법
+// 2-1. url_time 에서 해당 url 을 탐색해서 time과 is_grading(채점 중) 인지를 체크
+// 2-2. 가능할 경우 채점기에 넣기
+// 2-3. 채점 중이라서 불가능할 경우 unable_url에 저장(pq로 저장되기 때문에 나중에 해당 url이 채점 완료 처리됐을 때 하나씩 꺼내서 grader_waiting 에 다시 넣어주면됨.
+// 2-4. 시간이 경과하지 않아서 불가능한 경우 time_waiting에 저장 (pair<int, Test> 로 first=time, second=Test로 저장해서 time이 낮은 순으로 정렬되게끔 함.) 
+// 2-5. 여기서 결과를 출력할 때 unable_url 의 pq 요소의 개수 + grader_waiting 의 개수 + time_waiting의 개수를 합해야 하는데 unable_url 의 경우 u_m 타입이라 전체 탐색하지 않고, 따로 int cnt를 둬서 추가될때 +, 빠질 때 -로 해결함.
+
+// 3. 채점기의 개수
+// 3-1. 채점기의 개수 N 만큼 for문을 돌려서 grader 에 저장해주고, int 가 낮은 순으로 정렬되도록 함.
+// 3-2. 해당 채점기를 사용할 때 Grid grid 에 인덱스로 접근 후 시간과 해당 url 을 저장해줌.
+// 3-3. 채점이 완료되면 해당 인덱스를 비워주고, grader에 다시 저장해줌.
+
+// 그 외.
+// 1. url를 find('/') 를 통해 해당 idx 를 저장해줌 (바로 '\0' 로 바꿔주고 처리하려 했으나 url 이 완전 똑같은 경우를 처리해줘야 돼서 이렇게 함. 또한 '\0' 로 바꿔줄 경우 해시에서 그 뒤 문자열까지 읽어버려서 포기.)
+// 2. substr 로 새로운 string 변수에 저장해주고 해시 처리함. ( 이유는 1번 이유때문 )
+
 #include <iostream>
 #include <queue>
 #include <vector>
