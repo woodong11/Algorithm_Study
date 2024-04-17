@@ -1,0 +1,39 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+
+int main() {
+	while(1){
+		int a, b, c;
+		cin >> a >> b >> c;
+		if (a == 0 && b == 0 && c == 0)
+			break;
+
+		int li[] = {a,b,c};
+		int val = a;
+		int sum = a;
+		for (int i = 1; i < 3; i++) {
+			val = max(val, li[i]);
+			sum += li[i];
+		}
+		sum = sum / 2 + sum % 2;
+		if (val >= sum) {
+			cout << "Invalid" << endl;
+			continue;
+		}
+
+		if (a == b && b == c)
+			cout << "Equilateral" << endl;
+		else if (a != b && b != c && a != c)
+			cout << "Scalene " << endl;
+		else
+			cout << "Isosceles" << endl;
+
+		
+	}
+
+	return 0;
+
+}
